@@ -105,6 +105,8 @@ function ListCard(props) {
     }
     function handlePublishList() {
         store.publishList(idNamePair._id);
+        store.setPublishedDate(idNamePair._id)
+        console.log(store.currentList.publishedDate)
     }
     function handleDuplicateList(){
         store.duplicateList();
@@ -137,6 +139,7 @@ function ListCard(props) {
             ))         
     }
     let editToolbar = "";
+    let publishText = ""
     let buttonsAble = true;
     if (store.currentList) {
         if(!idNamePair.published){
@@ -144,6 +147,9 @@ function ListCard(props) {
         }
         buttonsAble = false;
     }
+    if (idNamePair.published) {
+        publishText = <Typography sx={{ color: "limegreen"}}>Published Date: {idNamePair.publishedDate[0].display}</Typography>
+    }    
     ////////////////////////////////////////////////
     let openCardElement=
         <Grid container 
@@ -221,6 +227,7 @@ function ListCard(props) {
             <Box sx={{ p: 1, flexGrow: 1 }}>
                 <Typography varient='h3'>{idNamePair.name}</Typography>
                 <Typography sx={{fontSize:"12px"}}>Listens: {idNamePair.views}</Typography>
+                {publishText}
                 <IconButton disabled={!idNamePair.published} aria-label='like'>
                     <ThumbUpRoundedIcon onClick={handleLike} style={{fontSize:'20pt'}} /> {idNamePair.likes}
                 </IconButton>

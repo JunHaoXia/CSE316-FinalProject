@@ -46,6 +46,8 @@ const HomeScreen = () => {
     function handleYouTube(){
         setScreenState(youtubeDisplay)
         console.log("Pressed YouTube Button")
+        console.log(store.idNamePairs)
+        console.log(store.currentList.updatedAt)
     }
     let listCard = ""
     if (store) {

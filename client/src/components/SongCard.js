@@ -43,6 +43,10 @@ function SongCard(props) {
             console.log("double clicked");
             store.showEditSongModal(index, song);
         }
+        if (event.detail === 1) {
+            console.log("single clicked")
+            store.setCurrentSong(index, song)
+        }
     }
 
     let cardClass = "list-card unselected-list-card";

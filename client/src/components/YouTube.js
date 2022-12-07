@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import YouTube from 'react-youtube';
 
 import { GlobalStoreContext } from '../store'
@@ -22,7 +22,8 @@ export default function YouTubePlayerExample() {
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
-    
+    const playerRef = useRef(null);
+
     let playlist = ["iOjfSAQvV6Y"]
     let titles = []
     let artists = []
@@ -40,9 +41,8 @@ export default function YouTubePlayerExample() {
     }
     console.log("Titles:")
     console.log(titles)
-    let t = null
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong = 0;
+    let currentSong = store.currentSongIndex;
     let currentTitle = "Don't Abandon me"
     let currentArtist = "Me"
     let currNum = "Infinity"
@@ -70,15 +70,17 @@ export default function YouTubePlayerExample() {
     function incSong() {
         currentSong++;
         currentSong = currentSong % playlist.length;
+        store.setCurrentSong(currentSong, store.currentList.songs[currentSong])
         
     }
     function decSong() {
         currentSong--;
         currentSong = currentSong % playlist.length;
+        store.setCurrentSong(currentSong, store.currentList.songs[currentSong])
     }
 
     function onPlayerReady(event) {
-        t = event.target
+        playerRef.current = event.target
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
     }
@@ -114,18 +116,18 @@ export default function YouTubePlayerExample() {
     }
     function prevSong() {
         decSong()
-        loadAndPlayCurrentSong(t)
+        loadAndPlayCurrentSong(playerRef.current)
         console.log("now playing song#:" + currentSong)
     }
     function pauseSong() {
-        t.pauseVideo()
+        playerRef.current.pauseVideo()
     }
     function playSong(){
-        t.playVideo()
+        playerRef.current.playVideo()
     }
     function nextSong() {
         incSong()
-        loadAndPlayCurrentSong(t)
+        loadAndPlayCurrentSong(playerRef.current)
         console.log("now playing song#:" + currentSong)
     }
     let playListTitle = "This is a cry for help"
@@ -151,6 +153,7 @@ export default function YouTubePlayerExample() {
             <YouTube
             videoId={playlist[currentSong]}
             opts={playerOptions}
+            ref={playerRef}
             onReady={onPlayerReady}
             onStateChange={onPlayerStateChange} />
             {videoInfo}

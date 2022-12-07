@@ -52,6 +52,10 @@ export default function SearchBanner() {
         store.sortListViews()
         handleMenuClose();
     }
+    const handleSortDate = () => {
+        store.sortListDate()
+        handleMenuClose();
+    }
     const handleSearch = (event) => {
         if (event.code === "Enter") {
             if (search_text != ''){
@@ -83,7 +87,7 @@ export default function SearchBanner() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleSortAlpha}>Name(A-Z)</MenuItem>
-            <MenuItem onClick={handleLogout}>Publish Date (Newest)</MenuItem>
+            <MenuItem onClick={handleSortDate}>Publish Date (Newest)</MenuItem>
             <MenuItem onClick={handleSortViews}>Listens (High-Low)</MenuItem>
             <MenuItem onClick={handleSortLikes}>Likes (High-Low)</MenuItem>
             <MenuItem onClick={handleSortDislikes}>Dislikes (High-Low)</MenuItem>
