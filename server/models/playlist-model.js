@@ -22,7 +22,11 @@ const playlistSchema = new Schema(
             name: String,
             comment: String
         }], required: true},
-        published: { type: Boolean, required: true}
+        published: { type: Boolean, required: true},
+        publishedDate: { type: [{
+            time: Number,
+            display: String
+        }], required: true},
     },
     { timestamps: true },
 )
