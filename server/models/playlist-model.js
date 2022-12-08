@@ -27,6 +27,7 @@ const playlistSchema = new Schema(
             time: Number,
             display: String
         }], required: true},
+        userName: { type: String, required: true},
     },
     { timestamps: true },
 )
