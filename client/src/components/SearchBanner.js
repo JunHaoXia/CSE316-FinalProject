@@ -28,14 +28,18 @@ export default function SearchBanner() {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => {
-        handleMenuClose();
-        auth.logoutUser();
-    }
-
     const handleHouseClick = () => {
-        store.closeCurrentList();
+        console.log("pressed house button")
+        store.loadIdNamePairs();
     }
+    const handleGroupClick = () => {
+        console.log("Pressed Group Button")
+        store.loadPublishedIdNamePairs()
+    }
+    const handlePersonClick = () => {
+        store.findUsers(search_text)
+    }
+    /////////////////////////////////////
     const handleSortAlpha = () => {
         store.sortListAlpha();
         handleMenuClose();
@@ -62,7 +66,12 @@ export default function SearchBanner() {
                 store.searchList(search_text)
                 document.getElementById("search-song-textfield").value = null;
             }
-            else store.loadIdNamePairs()
+            else{
+                if(store.currentFilter){
+                    store.loadPublishedIdNamePairs()
+                }
+                else store.loadIdNamePairs()
+            }
         }
     }
     const handleChange = (event) => {
@@ -112,7 +121,7 @@ export default function SearchBanner() {
                         component="div"
                         sx={{ width: 0.03, display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><GroupsRoundedIcon/></Link>
+                        <Link onClick={handleGroupClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><GroupsRoundedIcon/></Link>
                     </Typography>
                     <Typography                        
                         variant="h4"
@@ -120,7 +129,7 @@ export default function SearchBanner() {
                         component="div"
                         sx={{ width: 0.03, display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><PersonRoundedIcon/></Link>
+                        <Link onClick={handlePersonClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><PersonRoundedIcon/></Link>
                     </Typography>
                     Search: 
                     <Typography sx={{margin: .5, mt: "10px", fontWeight:"bold", fontSize:"15px"}} id="modal-modal-title" variant="h6" component="h2">

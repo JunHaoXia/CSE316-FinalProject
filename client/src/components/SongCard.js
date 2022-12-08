@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
-    const { song, index } = props;
+    const { song, index, allowed } = props;
 
     function handleDragStart(event) {
         event.dataTransfer.setData("song", index);
@@ -35,6 +36,7 @@ function SongCard(props) {
         store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
+        event.stopPropagation();
         store.showRemoveSongModal(index, song);
     }
     function handleClick(event) {
@@ -43,12 +45,22 @@ function SongCard(props) {
             console.log("double clicked");
             store.showEditSongModal(index, song);
         }
-        if (event.detail === 1) {
+        if (event.detail === 1){
             console.log("single clicked")
             store.setCurrentSong(index, song)
+            event.stopPropagation();
         }
     }
-
+    let closeButton = ""
+    if (allowed){
+        closeButton = 
+        <Button
+        sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px"}}
+        variant="contained"
+        id={"remove-song-" + index}
+        className="list-card-button"
+        onClick={handleRemoveSong}>{"\u2715"}</Button>
+    }
     let cardClass = "list-card unselected-list-card";
     return (
         <div
@@ -70,12 +82,7 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <Button
-                sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px"}}
-                variant="contained"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                onClick={handleRemoveSong}>{"\u2715"}</Button>
+            {closeButton}
         </div>
     );
 }

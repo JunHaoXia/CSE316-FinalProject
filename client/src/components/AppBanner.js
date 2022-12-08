@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
 
-import EditToolbar from './EditToolbar'
+import playlisterLogo from './images/playlisterLogo.png'
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
@@ -32,9 +32,9 @@ export default function AppBanner() {
         handleMenuClose();
         auth.logoutUser();
     }
-
-    const handleHouseClick = () => {
-        store.closeCurrentList();
+    const handleGuest = () => {
+        auth.guestLogin()
+        handleMenuClose();
     }
 
     const menuId = 'primary-search-account-menu';
@@ -56,7 +56,7 @@ export default function AppBanner() {
         >
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/guest/'>Continue as Guest</Link></MenuItem>
+            <MenuItem onClick={handleGuest}><Link to='/'>Continue as Guest</Link></MenuItem>
         </Menu>
     );
     const loggedInMenu = 
@@ -78,7 +78,6 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
-    let editToolbar = "";
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
@@ -106,9 +105,9 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link style={{ textDecoration: 'none', color: 'red' , fontFamily:"cursive"}} to='/'>Playlister</Link>
+                        <img src={playlisterLogo} alt="playlisterLogo" width='255px'/>
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}></Box>
                     <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"

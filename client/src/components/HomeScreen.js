@@ -10,7 +10,6 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import SearchBanner from './SearchBanner.js';
 import YouTubePlayerExample from './YouTube.js';
-import YouTubeTab from './YouTubeTab.js';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,7 +28,7 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
-    let youtubeDisplay = <YouTubeTab />
+    let youtubeDisplay = <YouTubePlayerExample />
     const [screenState, setScreenState] = useState(youtubeDisplay);
     let buttonsAble = true;
     if(store.currentList != null){
@@ -63,7 +62,7 @@ const HomeScreen = () => {
                 ))
                 
             }
-            <Fab sx={{transform:"translate(800%, 10%)"}}
+            <Fab sx={{transform:"translate(500%, 10%)"}}
                     color="primary" 
                     aria-label="add"
                     id="add-list-button"
@@ -76,7 +75,7 @@ const HomeScreen = () => {
     }
     return (
         <div id="playlist-selector">
-            <div id="list-selector-heading">
+            {/* <div id="list-selector-heading">
             <Fab sx={{transform:"translate(-20%, 0%)"}}
                 color="primary" 
                 aria-label="add"
@@ -86,7 +85,7 @@ const HomeScreen = () => {
                 <AddIcon />
             </Fab>
                 Your Playlists
-            </div>
+            </div> */}
             <SearchBanner />
             <Grid container component="main" sx={{ height: '100vh' }}>
                 <CssBaseline />

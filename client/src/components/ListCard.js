@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
@@ -29,6 +30,7 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [open, setOpen] = useState(false);
@@ -89,7 +91,9 @@ function ListCard(props) {
     /////////////////////////////////////////
     function handleOpen(event, id){
         setOpen(true)
+        console.log(idNamePair)
         store.setCurrentList(id)
+        console.log(store.currentList)
     }
     function handleClose(){
         store.closeCurrentList()
@@ -135,21 +139,55 @@ function ListCard(props) {
                     key={'playlist-song-' + (index)}
                     index={index}
                     song={song}
+                    allowed={idNamePair.userName == auth.user.userName}
                 />                
             ))         
     }
+
     let editToolbar = "";
     let publishText = ""
+    let editBar = "";
+    let moreButtons = "";
     let buttonsAble = true;
-    if (store.currentList) {
+    if (store.currentList && (idNamePair.userName == auth.user.userName)) {
         if(!idNamePair.published){
             editToolbar = <EditToolbar />;
         }
         buttonsAble = false;
     }
     if (idNamePair.published) {
+        console.log(idNamePair)
+        console.log(idNamePair.publishedDate[0])
         publishText = <Typography sx={{ color: "limegreen"}}>Published Date: {idNamePair.publishedDate[0].display}</Typography>
     }    
+    if (idNamePair.userName == auth.user.userName){
+    moreButtons= 
+    <div>
+        <IconButton sx={{fontSize: '15px'}} disabled={idNamePair.published} onClick={(event) => {
+                    handlePublishList()
+                }} aria-label='publish'>
+                    Publish
+        </IconButton>
+        <IconButton sx={{fontSize: '15px'}} disabled={idNamePair.published} onClick={(event) => {
+                    handleDeleteList(event, idNamePair._id)
+                }} aria-label='delete'>
+                Delete
+        </IconButton>
+    </div>
+    editBar =
+        <div>
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={!buttonsAble || idNamePair.published}>
+                    <EditIcon style={{fontSize:'32pt'}} />
+                </IconButton>
+                <IconButton onClick={(event) => {
+                        handleDeleteList(event, idNamePair._id)
+                    }} aria-label='delete' disabled={!buttonsAble}>
+                    <DeleteIcon style={{fontSize:'32pt'}} />
+                </IconButton>
+            </Box>
+        </div>
+    }
     ////////////////////////////////////////////////
     let openCardElement=
         <Grid container 
@@ -161,7 +199,7 @@ function ListCard(props) {
                     Title: {idNamePair.name}
                 </Typography>
                 <Typography sx={{ height: 1/2 ,fontSize: '10px'}}>
-                    By: {idNamePair.owner}
+                    By: {idNamePair.userName}
                     <br />
                     Listens: {idNamePair.views}
                 </Typography>
@@ -183,20 +221,11 @@ function ListCard(props) {
                 <Box></Box>
             </Grid>
             <Grid item xs={12} sm={4}>
-                <IconButton sx={{fontSize: '15px'}} disabled={idNamePair.published} onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    Delete
-                </IconButton>
+                {moreButtons}
                 <IconButton sx={{fontSize: '15px'}} onClick={(event) => {
                         handleDuplicateList()
                     }} aria-label='duplicate'>
                     Duplicate
-                </IconButton>
-                <IconButton sx={{fontSize: '15px'}} disabled={idNamePair.published} onClick={(event) => {
-                        handlePublishList()
-                    }} aria-label='publish'>
-                    Publish
                 </IconButton>
             </Grid>
             <Grid item>
@@ -235,18 +264,7 @@ function ListCard(props) {
                     <ThumbDownAltRoundedIcon onClick={handleDislike} style={{fontSize:'20pt'}} /> {idNamePair.dislikes}
                 </IconButton>
             </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={!buttonsAble || idNamePair.published}>
-                    <EditIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete' disabled={!buttonsAble}>
-                    <DeleteIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-            </Box>
+            {editBar}
         </ListItem>
 
     if (editActive) {

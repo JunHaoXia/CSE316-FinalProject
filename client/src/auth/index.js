@@ -60,7 +60,48 @@ function AuthContextProvider(props) {
                 return auth;
         }
     }
-
+    auth.guestLogin = async function() {
+        try{
+            const response = await api.loginUser("guest@gmail.com", "GuestPassword");
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user,
+                        loggedIn: true,
+                        errorMessage: null
+                    }
+                })
+                history.push("/");
+            }
+        } catch(error){
+            try{
+                const response = await api.registerUser("Guest", "User", "guest@gmail.com", "Guest", "GuestPassword", "GuestPassword");
+                if (response.status === 200) {
+                    console.log("Registered Sucessfully");
+                    authReducer({
+                        type: AuthActionType.REGISTER_USER,
+                        payload: {
+                            user: response.data.user,
+                            loggedIn: true,
+                            errorMessage: null
+                        }
+                    })
+                    auth.loginUser("guest@gmail.com", "GuestPassword");
+                    console.log("GUEST LOGGED IN");
+                }
+            } catch(error){
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: auth.user,
+                        loggedIn: false,
+                        errorMessage: error.response.data.errorMessage
+                    }
+                })
+            }
+        }
+    }
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
@@ -74,10 +115,10 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function(firstName, lastName, email, userName, password, passwordVerify) {
         console.log("REGISTERING USER");
         try{   
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);   
+            const response = await api.registerUser(firstName, lastName, email, userName, password, passwordVerify);   
             if (response.status === 200) {
                 console.log("Registered Sucessfully");
                 authReducer({
