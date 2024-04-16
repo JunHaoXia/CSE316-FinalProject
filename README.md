@@ -1,5 +1,6 @@
 # CSE316-FinalProject
 Features:
+
 Numbered Cards - Note that when a list loads the songs are all displayed as cards. Update those cards so that they are numbered starting with 1 to denote playlist song order.
 
 Song Hyperlinks - The song cards all list the song title and artist name as plaintext. Update these cards so that the text is wrapped in a hyperlink that, when clicked, takes the user to the YouTube video corresponding to that song's YouTube id. Note that the hyperlink should wrap the song title and artist name but not the song number. Note that the Numbered Cards and the Hyperlinks are shown in Figure 1.
@@ -17,6 +18,8 @@ Add List Button - if a list is in the process of being edited this button should
 Add Song Button - this button should only be enabled if a list is currently loaded and being edited.
 Undo/Redo Buttons - if there are no transactions to Undo, this button should be visibly and functionally disabled, the same goes for the Redo button. Note our example application does not do this.
 Close List - if a list is not loaded for editing the Close List button should be disabled.
+
+How to start it:
 cd client and cd server on a split terminal
 
 server terminal:
